@@ -1,0 +1,35 @@
+1. JNIEnv* ：指向了所有 jni函数 的指针，即通过这个指针，可以调用jni中所有的方法。只在当前线程有效，不能跨线程
+   在C和C++ 环境下调用的区别：
+
+2. JavaVm： jvm在jni层的表示，它是线程共享的。
+
+3。链接到虚拟机，JNIEnv指针仅在创建它的线程有效。如果我们需要在其他线程访问JVM，那么必须先调用AttachCurrentThread将当前线程与JVM进行关联，
+然后才能获得JNIEnv对象
+   
+4.同 JNIEnv 指针一样,jobject指针也不能在多个线程中共享. 就是说,不能直接在保存一个线程中的jobject指针到全局变量中,然后在另外一个线程中使用它.幸运的是,可以用 
+gs_object=env->NewGlobalRef(obj);//创建一个全局变量     
+   
+2 。调用 Java 中 native 方法的实例或 Class 对象，如果这个 native 方法是实例方法，则该参数是 jobject，如果是静态方法，则是 jclass
+
+3. 引用类型：Object、String、数组。。。所有的 JNI 引用类型全部是 jobject 类型
+
+4.调用 GetStringUTFChars 函数从 JVM 内部获取一个字符串之后，JVM 内部会分配一块新的内存，用于存储源字符串的拷贝，以便本地代码访问和修改。即然有内存分配，
+用完之后马上释放是一个编程的好习惯。通过调用ReleaseStringUTFChars 函数通知 JVM 这块内存已经不使用了
+
+5.GetStringRegion和GetStringUTFRegion
+
+分别表示获取 Unicode 和 UTF-8 编码字符串指定范围内的内容。这对函数会把源字符串复制到一个预先分配的缓冲区内。（ C 临时缓冲区）
+GetStringUTFRegion 内部不分配内存，不会抛出内存溢出异常。
+
+6.对象数组中的所有元素是一个类的实例或其它数组的引用，和字符串操作一样，不能直接访问 Java 传递给 JNI 层的数组，必须选择合适的 JNI 函数来访问和设置 Java 层的数组对象
+
+7.
+ jclass clazz = NULL;  
+    jstring str_arg = NULL; 
+     // 删除局部引用  
+    (*env)->DeleteLocalRef(env,clazz);  
+    (*env)->DeleteLocalRef(env,str_arg);  
+	
+	https://blog.csdn.net/qq_32583189/article/details/53172316
+	
+	https://www.zybuluo.com/cxm-2016/note/563686
