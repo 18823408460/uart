@@ -19,14 +19,57 @@
 static JavaVM *gVm;
 static jmethodID methodId;
 static jobject obj;
+
+
+void *threadreadTtyData(void *arg) {
+    LOGE("create read data thred success.....threadreadTtyData.....");
+
+    int index = 0;
+    JNIEnv *env = NULL;
+    if ((*gVm)->AttachCurrentThread(gVm, &env, NULL) == 0) {
+        LOGE("--------------Attach ok=-=-=-=-=-=-=-=-=-=-=-=-=-");
+        jclass cls = (*env)->GetObjectClass(env, obj); //这里获取的是class，
+        while (index < 10) {
+            (*env)->CallVoidMethod(env, obj, methodId, 2222); //只能传递 obj
+            index++;
+            sleep(3);
+        }
+//        (*env)->CallVoidMethod(env, cls, methodId, 2222);
+
+        (*gVm)->DetachCurrentThread(gVm);
+
+    } else {
+        LOGE("---------Attach error-----------");
+    }
+}
+/**
+ * 线程间不能直接传递JNIEnv和jobject这类线程专属属性值
+ * 每个进程只有一个JavaVM，而这个JavaVM可以被多线程共享，但是JNIEnv和jobject是属于线程私有的，不能共享
+ * > 线程间传递参数
+ * > 参数的全局引用
+ * @param env
+ * @param clazz
+ * @return
+ */
 //返回一个字符串
 JNIEXPORT jstring JNICALL native_hello(JNIEnv *env, jclass clazz) {
     // (*env)->CallVoidMethod(env, clazz, methodId,11);
+    pthread_t id;
+    int ret;
     (*env)->CallVoidMethod(env, clazz, methodId, 11133);
+    obj = (*env)->NewGlobalRef(env, clazz);
+//    obj = clazz;  这是错误的， 一旦这个方法返回，clazz就会被回收，导致非法调用
+    ret = pthread_create(&id, NULL, threadreadTtyData, NULL);
+    if (ret != 0) {
+        LOGE("create receiver thread failure ");
+    } else {
+        LOGE("create read data thred success");
+    }
+
     return (*env)->NewStringUTF(env, "helloJNI");
 }
 //求两个int的值
-JNIEXPORT jint JNICALL native_add(JNIEnv *env, jclass clazz, jint a, jint b) {
+JNIEXPORT jint JNICALL native_add(JNIEnv *env, jclass clazz, jint a, jint b) { // 这个class才是实例对象
     return a + b;
 }
 
@@ -36,44 +79,23 @@ static JNINativeMethod method_table[] = {
         {"native_add",   "(II)I",                (void *) native_add}
 };
 
-void *threadreadTtyData(void *arg) {
-    LOGE("create read data thred success.....threadreadTtyData.....");
-
-    JNIEnv *env = NULL;
-    if ((*gVm)->AttachCurrentThread(gVm, &env, NULL) == 0) {
-        LOGE("--------------Attach ok=-=-=-=-=-=-=-=-=-=-=-=-=-");
-        jclass cls = (*env)->GetObjectClass(env, obj);
-
-        (*env)->CallVoidMethod(env, obj, methodId, 11133);
-        //(*env)->CallVoidMethod(env, cls, methodId, 33);
-        (*gVm)->DetachCurrentThread(gVm);
-    } else {
-        LOGE("---------Attach error-----------");
-    }
-}
-
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     //OnLoad方法是没有JNIEnv参数的，需要通过vm获取。
     gVm = vm;
     JNIEnv *env = NULL;
-    pthread_t id;
-    int ret;
+
     if ((*vm)->AttachCurrentThread(vm, &env, NULL) == JNI_OK) {
         //获取对应声明native方法的Java类 com.uurobot.serialportcompiler
-        jclass clazz = (*env)->FindClass(env, "com/uurobot/serialportcompiler/DynamicReg");
+        jclass clazz = (*env)->FindClass(env,
+                                         "com/uurobot/serialportcompiler/DynamicReg"); //这里获取的是class，而不是实例对象
         methodId = (*env)->GetMethodID(env, clazz, "onAudio", "(I)V");
-        ret = pthread_create(&id, NULL, threadreadTtyData, NULL);
-        if (ret != 0) {
-            LOGE("create receiver thread failure ");
-        } else {
-            LOGE("create read data thred success");
-        }
+
         if (methodId == 0) {
             LOGE("find method3 error");
             return 0;
         }
-        obj = (*env)->NewGlobalRef(env, clazz);;
+
         LOGE("find method3........................."); //这里不能 回调方法
 
         if (clazz == NULL) {

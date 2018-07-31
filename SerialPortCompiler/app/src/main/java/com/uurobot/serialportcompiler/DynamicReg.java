@@ -7,7 +7,7 @@ import android.util.Log;
  */
 
 public class DynamicReg {
-      private static final String TAG = "SecondActivity";
+      private static final String TAG = "SecondActivityamicReg";
       static {
             System.loadLibrary("dynamic");
       }
@@ -17,6 +17,6 @@ public class DynamicReg {
       public native int native_add(int a, int b);
       
       public void onAudio(int data) {
-            Log.e(TAG, "onAudio: data== " + data);
+            Log.e(TAG, "onAudio: data== " + data + "    name="+Thread.currentThread().getName());
       }
 }

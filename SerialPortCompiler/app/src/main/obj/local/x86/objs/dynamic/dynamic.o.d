@@ -1,6 +1,6 @@
-D:/AndroidDemo/SerialPortCompiler/app/src/main//obj/local/x86/objs/dynamic/dynamic.o: \
- D:/AndroidDemo/SerialPortCompiler/app/src/main//jni/dynamic.c \
- D:/AndroidDemo/SerialPortCompiler/app/src/main//jni/termios.h \
+F:/github/uartTest/uart/SerialPortCompiler/app/src/main//obj/local/x86/objs/dynamic/dynamic.o: \
+ F:/github/uartTest/uart/SerialPortCompiler/app/src/main//jni/dynamic.c \
+ F:/github/uartTest/uart/SerialPortCompiler/app/src/main//jni/termios.h \
  D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-9/arch-x86/usr/include/sys/cdefs.h \
  D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-9/arch-x86/usr/include/sys/cdefs_elf.h \
  D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-9/arch-x86/usr/include/android/api-level.h \
@@ -66,7 +66,7 @@ D:/AndroidDemo/SerialPortCompiler/app/src/main//obj/local/x86/objs/dynamic/dynam
  D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-9/arch-x86/usr/include/stdio.h \
  D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-9/arch-x86/usr/include/android/log.h
 
-D:/AndroidDemo/SerialPortCompiler/app/src/main//jni/termios.h:
+F:/github/uartTest/uart/SerialPortCompiler/app/src/main//jni/termios.h:
 
 D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-9/arch-x86/usr/include/sys/cdefs.h:
 
