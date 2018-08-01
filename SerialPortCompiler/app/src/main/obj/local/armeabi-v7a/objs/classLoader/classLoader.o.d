@@ -1,5 +1,5 @@
-F:/github/uartTest/uart/SerialPortCompiler/app/src/main//obj/local/armeabi/objs/dynamic/dynamic.o: \
- F:/github/uartTest/uart/SerialPortCompiler/app/src/main//jni/dynamic.c \
+F:/github/uartTest/uart/SerialPortCompiler/app/src/main//obj/local/armeabi-v7a/objs/classLoader/classLoader.o: \
+ F:/github/uartTest/uart/SerialPortCompiler/app/src/main//jni/classLoader.c \
  F:/github/uartTest/uart/SerialPortCompiler/app/src/main//jni/termios.h \
  D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/sys/cdefs.h \
  D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/sys/cdefs_elf.h \

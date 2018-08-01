@@ -7,16 +7,22 @@ import android.util.Log;
  */
 
 public class Myclass {
-        private static String name = "staticName";
-        private String pName = "MyclassPName" ;
-
-        private int count = 1 ;
-
-        public void printName(){
-                Log.e("serialport","name="+pName) ;
-        }
-
-        public void setName(String name){
-                this.pName = name ;
-        }
+      private static final String TAG = "Myclass";
+      private static String name = "staticName";
+      private String pName = "MyclassPName";
+      
+      private int count = 1;
+      
+      public void printName() {
+            Log.e(TAG, "printName=" + pName);
+      }
+      
+      public void setName(String name) {
+            this.pName = name;
+            Log.e(TAG, "setName: " + name + "   name==" + Thread.currentThread().getName());
+      }
+      
+      private void test() {
+            Log.e(TAG, "test: "+hashCode());
+      }
 }

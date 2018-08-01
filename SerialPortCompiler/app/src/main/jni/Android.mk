@@ -16,10 +16,10 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-//LOCAL_MODULE    := serialPort
-//LOCAL_SRC_FILES := SerialPortMgr.c
-LOCAL_MODULE    := dynamic
-LOCAL_SRC_FILES := dynamic.c
+LOCAL_MODULE    := serialPort
+LOCAL_SRC_FILES := SerialPortMgr.c
+//LOCAL_MODULE    := dynamic
+//LOCAL_SRC_FILES := dynamic.c
 
 LOCAL_LDLIBS := -llog -lz
 include $(BUILD_SHARED_LIBRARY)

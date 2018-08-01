@@ -7,26 +7,21 @@
 #include <jni.h>
 #include <pthread.h>
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <string.h>
 #include <sys/ioctl.h>
 #include "android/log.h"
+
 #ifndef _Included_com_uurobot_serialportcompiler_jniTest_SerialPortMgr
 #define _Included_com_uurobot_serialportcompiler_jniTest_SerialPortMgr
 #ifdef __cplusplus
 extern "C" {
 #endif
-static const char *TAG = "serial_port";
+static const char *TAG = "SerialPortMgrNative";
 #define LOGI(fmt, args...) __android_log_print(ANDROID_LOG_INFO,  TAG, fmt, ##args)
 #define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_DEBUG, TAG, fmt, ##args)
 #define LOGE(fmt, args...) __android_log_print(ANDROID_LOG_ERROR, TAG, fmt, ##args)
 int fd;
-jmethodID method3;
-JNIEnv *env;
-jobject cls;
-
+static jobject obj;
+static JavaVM *gVm;
 // https://juejin.im/post/5b4c0a09f265da0f955cc1c7?utm_source=gold_browser_extension
 
 
@@ -101,9 +96,9 @@ static speed_t getBaudrate(jint baudrate) {
 
 
 void *threadreadTtyData(void *arg) {
-    LOGE("run read data");
+    LOGE("run read data=================1");
 
-    char buf[100]  ;
+    char buf[100];
     int result = 0, ret;
     fd_set readfd;
     struct timeval timeout;
@@ -113,7 +108,7 @@ void *threadreadTtyData(void *arg) {
         timeout.tv_usec = 0;//设定超时毫秒数
         FD_ZERO(&readfd);//清空集合
         FD_SET(fd, &readfd);///* 把要检测的句柄mTtyfd加入到集合里 */
-        ret = select(fd+1, &readfd, NULL, NULL, &timeout);/* 检测我们上面设置到集合readfd里的句柄是否有可读信息 */
+        ret = select(fd + 1, &readfd, NULL, NULL, &timeout);/* 检测我们上面设置到集合readfd里的句柄是否有可读信息 */
         switch (ret) {
             case -1:/* 这说明select函数出错 */
                 result = -1;
@@ -125,17 +120,21 @@ void *threadreadTtyData(void *arg) {
             default:/* 说明等待时间还未到5秒加0毫秒，mTty的状态发生了变化 */
                 if (FD_ISSET(fd, &readfd)) {/* 先判断一下mTty这外被监视的句柄是否真的变成可读的了 */
                     int len = read(fd, buf, sizeof(buf));
-                    LOGE("mTtyfd read .......%d",+len);
-                    (*env)->CallVoidMethod(env, cls, method3,(*env)->NewStringUTF(env,"haha in C ."));
-                    memset(buf, 0, sizeof(buf));
+                    LOGE("mTtyfd read len====== %d  >>>>>>>>>>>>", +len);
+                    int i = 0;
+                    for (i = 0; i < len; i++) {
+                        if (buf[i] == 0x08 && buf[i + 1] == 0x06) {
+                            LOGE("-----------read head------------------");
+                        }
+                    }
                 }
-
                 break;
         }
         if (result == -1) {
             break;
         }
     }
+    (*gVm)->DetachCurrentThread(gVm);
     LOGE("stop run!");
     return NULL;
 
@@ -147,10 +146,9 @@ void *threadreadTtyData(void *arg) {
  * Signature: (Ljava/lang/String;II)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPortMgr_open
-  (JNIEnv *env1, jclass cls1, jstring path, jint baudrate, jint flag){
-    env = env1 ;
-    cls = cls1 ;
+        (JNIEnv *env, jclass objData, jstring path, jint baudrate, jint flag) {
     speed_t speed;
+//    obj = (*env)->NewGlobalRef(env, objData);
     /* Check arguments */
     {
         speed = getBaudrate(baudrate);
@@ -202,27 +200,13 @@ JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPor
 
     pthread_t id;
     int ret;
-    ret = pthread_create(&id,NULL,threadreadTtyData,NULL);
-    if(ret != 0){
+    ret = pthread_create(&id, NULL, threadreadTtyData, NULL);
+    if (ret != 0) {
         LOGE("create receiver thread failure ");
-    }else{
+    } else {
         LOGE("create read data thred success");
     }
 
-    jclass clazz = (*env)->FindClass(env, "com/uurobot/serialportcompiler/SerialPortMgr");
-    if(clazz == 0){
-        LOGE("find class error");
-        return 0;
-    }
-    LOGE("find class");
-
-    method3 = (*env)->GetMethodID(env,clazz,"onReceiveData","(Ljava/lang/String;)V");
-    if(method3 == 0){
-        LOGE("find method3 error");
-        return 0;
-    }
-    LOGE("find method3");
-    (*env)->CallVoidMethod(env, cls, method3,(*env)->NewStringUTF(env,"haha in C ."));
     return 1;
 }
 
@@ -232,8 +216,14 @@ JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPor
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPortMgr_close
-  (JNIEnv *env, jobject obj){
+        (JNIEnv *env, jobject obj) {
 
+}
+
+JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
+    //OnLoad方法是没有JNIEnv参数的，需要通过vm获取。
+    gVm = vm;
+    return JNI_VERSION_1_4;
 }
 
 #ifdef __cplusplus

@@ -12,17 +12,17 @@ public class SerialPortMgr {
 
         private static final String TAG = "SerialPortMgr";
 
-        private static SerialPortMgr serialPortMgr;
+//        private static SerialPortMgr serialPortMgr;
 
         private final String ttyName = "/dev/ttyS3";
 
         private File device;
 
-        private SerialPortMgr() {
-                initTtyDevice() ;
+        public SerialPortMgr() {
+        
         }
-
-        private void initTtyDevice() {
+        
+        public void initTtyDevice() {
                 device = new File(ttyName);
                 if (!device.canRead() || !device.canWrite()) {
                         try {
@@ -49,7 +49,7 @@ public class SerialPortMgr {
         }
 
 
-        public static SerialPortMgr getInstance() {
+ /*       public static SerialPortMgr getInstance() {
                 if (serialPortMgr == null) {
                         synchronized (SerialPortMgr.class) {
                                 if (serialPortMgr == null) {
@@ -58,16 +58,16 @@ public class SerialPortMgr {
                         }
                 }
                 return serialPortMgr;
-        }
+        }*/
 
 
         //-----------jni相关---------------//
         public native static boolean open(String path, int baudrate,int flags);
         static {
-                System.loadLibrary("serial_port");
+                System.loadLibrary("serialPort");
         }
         public native  void close();
-        public void onReceiveData(String data){
-                Log.e("serialport","receiverData。。。"+data) ;
+        public void onReceiveData(){
+                Log.e("serialport","receiverData。。。") ;
         }
 }

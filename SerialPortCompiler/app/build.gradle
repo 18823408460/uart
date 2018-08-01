@@ -14,7 +14,7 @@ android {
         ndk {
             moduleName "serialport"
             ldLibs "log"
-            abiFilters "armeabi", "armeabi-v7a","x86"
+            abiFilters "armeabi", "armeabi-v7a", "x86"
         }
         externalNativeBuild {
             cmake {
@@ -38,6 +38,15 @@ android {
             path "CMakeLists.txt"
         }
     }
+
+    sourceSets {
+        debug {
+            jniLibs.srcDirs = ['src/main/libs']
+        }
+        release {
+            jniLibs.srcDirs = ['src/main/libs']
+        }
+    }
 }
 
 dependencies {
@@ -50,7 +59,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-task copySo(type:Copy){
+task copySo(type: Copy) {
     from 'src/main/obj/local/'
     into 'src/main/jnilibs/'
 }

@@ -18,7 +18,8 @@
 
 static JavaVM *gVm;
 static jmethodID methodId;
-static jobject obj;
+static jobject obj; // 实例对象
+static jclass jcls;// class
 
 
 void *threadreadTtyData(void *arg) {
@@ -28,7 +29,7 @@ void *threadreadTtyData(void *arg) {
     JNIEnv *env = NULL;
     if ((*gVm)->AttachCurrentThread(gVm, &env, NULL) == 0) {
         LOGE("--------------Attach ok=-=-=-=-=-=-=-=-=-=-=-=-=-");
-        jclass cls = (*env)->GetObjectClass(env, obj); //这里获取的是class，
+        jclass cls = (*env)->GetObjectClass(env, obj); //这里获取的是class， GetObjectClass=通过对象获取class
         while (index < 10) {
             (*env)->CallVoidMethod(env, obj, methodId, 2222); //只能传递 obj
             index++;
@@ -88,7 +89,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     if ((*vm)->AttachCurrentThread(vm, &env, NULL) == JNI_OK) {
         //获取对应声明native方法的Java类 com.uurobot.serialportcompiler
         jclass clazz = (*env)->FindClass(env,
-                                         "com/uurobot/serialportcompiler/DynamicReg"); //这里获取的是class，而不是实例对象
+                                         "com/uurobot/serialportcompiler/DynamicReg"); //这里获取的是class，而不是实例对象，通过类的全名
         methodId = (*env)->GetMethodID(env, clazz, "onAudio", "(I)V");
 
         if (methodId == 0) {
