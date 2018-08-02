@@ -17,5 +17,6 @@ public class JNIActivity extends Activity {
             
             SerialPortMgr instance = new SerialPortMgr();
             instance.initTtyDevice();
+            instance.close();
       }
 }

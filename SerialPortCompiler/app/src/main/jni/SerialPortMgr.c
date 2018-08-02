@@ -20,7 +20,7 @@ static const char *TAG = "SerialPortMgrNative";
 #define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_DEBUG, TAG, fmt, ##args)
 #define LOGE(fmt, args...) __android_log_print(ANDROID_LOG_ERROR, TAG, fmt, ##args)
 int fd;
-static jobject obj;
+static jobject g_obj;
 static JavaVM *gVm;
 // https://juejin.im/post/5b4c0a09f265da0f955cc1c7?utm_source=gold_browser_extension
 
@@ -102,6 +102,10 @@ void *threadreadTtyData(void *arg) {
     int result = 0, ret;
     fd_set readfd;
     struct timeval timeout;
+    JNIEnv *env;
+    (*gVm)->AttachCurrentThread(gVm, &env, NULL);
+    jclass jclass1 = (*env)->GetObjectClass(env, g_obj);
+    jmethodID jmethodID1 = (*env)->GetMethodID(env, jclass1, "onReceiveData", "()V");
     while (1) {
         timeout.tv_sec = 2;//设定超时秒数
         timeout.tv_usec = 0;//设定超时毫秒数
@@ -120,6 +124,7 @@ void *threadreadTtyData(void *arg) {
                 if (FD_ISSET(fd, &readfd)) {/* 先判断一下mTty这外被监视的句柄是否真的变成可读的了 */
                     int len = read(fd, buf, sizeof(buf));
 //                    LOGE("mTtyfd read len====== %d  >>>>>>>>>>>>", +len);
+                    (*env)->CallVoidMethod(env, g_obj, jmethodID1);
                 }
                 break;
         }
@@ -139,9 +144,10 @@ void *threadreadTtyData(void *arg) {
  * Signature: (Ljava/lang/String;II)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPortMgr_open
-        (JNIEnv *env, jobject objData, jstring path, jint baudrate, jint flag) {
+        (JNIEnv *env, jobject obj, jstring path, jint baudrate, jint flag) {
+    LOGE("--------------------open--------------------");
     speed_t speed;
-//    obj = (*env)->NewGlobalRef(env, objData);
+    g_obj = (*env)->NewGlobalRef(env, obj);
     /* Check arguments */
     {
         speed = getBaudrate(baudrate);
@@ -199,7 +205,6 @@ JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPor
     } else {
         LOGE("create read data thred success");
     }
-
     return 1;
 }
 
@@ -211,11 +216,7 @@ JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPor
 JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPortMgr_close
         (JNIEnv *env, jobject obj) {
     LOGE("--------------------close--------------------");
-    jclass jclass1 = (*env)->GetObjectClass(env, obj);
-    jmethodID jmethodID1 = (*env)->GetMethodID(env, jclass1, "data", "()V");
-    (*env)->CallVoidMethod(env,obj,jmethodID1);
-
-    return 0 ;
+    return 0;
 }
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
