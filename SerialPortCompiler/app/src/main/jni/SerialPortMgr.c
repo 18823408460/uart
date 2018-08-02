@@ -103,7 +103,6 @@ void *threadreadTtyData(void *arg) {
     fd_set readfd;
     struct timeval timeout;
     while (1) {
-        LOGE(".......run ..........");
         timeout.tv_sec = 2;//设定超时秒数
         timeout.tv_usec = 0;//设定超时毫秒数
         FD_ZERO(&readfd);//清空集合
@@ -120,13 +119,7 @@ void *threadreadTtyData(void *arg) {
             default:/* 说明等待时间还未到5秒加0毫秒，mTty的状态发生了变化 */
                 if (FD_ISSET(fd, &readfd)) {/* 先判断一下mTty这外被监视的句柄是否真的变成可读的了 */
                     int len = read(fd, buf, sizeof(buf));
-                    LOGE("mTtyfd read len====== %d  >>>>>>>>>>>>", +len);
-                    int i = 0;
-                    for (i = 0; i < len; i++) {
-                        if (buf[i] == 0x08 && buf[i + 1] == 0x06) {
-                            LOGE("-----------read head------------------");
-                        }
-                    }
+//                    LOGE("mTtyfd read len====== %d  >>>>>>>>>>>>", +len);
                 }
                 break;
         }
@@ -146,7 +139,7 @@ void *threadreadTtyData(void *arg) {
  * Signature: (Ljava/lang/String;II)Z
  */
 JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPortMgr_open
-        (JNIEnv *env, jclass objData, jstring path, jint baudrate, jint flag) {
+        (JNIEnv *env, jobject objData, jstring path, jint baudrate, jint flag) {
     speed_t speed;
 //    obj = (*env)->NewGlobalRef(env, objData);
     /* Check arguments */
@@ -215,9 +208,14 @@ JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPor
  * Method:    close
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPortMgr_close
+JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPortMgr_close
         (JNIEnv *env, jobject obj) {
+    LOGE("--------------------close--------------------");
+    jclass jclass1 = (*env)->GetObjectClass(env, obj);
+    jmethodID jmethodID1 = (*env)->GetMethodID(env, jclass1, "data", "()V");
+    (*env)->CallVoidMethod(env,obj,jmethodID1);
 
+    return 0 ;
 }
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
