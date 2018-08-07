@@ -2,8 +2,10 @@ package com.uurobot.serialportcompiler.jniTest;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.SystemClock;
 import android.util.Log;
 
+import com.uurobot.serialportcompiler.constant.MsgCon;
 import com.uurobot.serialportcompiler.utils.CycleQueue;
 import com.uurobot.serialportcompiler.utils.DataUtils;
 
@@ -24,7 +26,7 @@ public class SerialPortMgr {
       private File device;
       
       private SerialPortMgr() {
-            HandlerThread handlerThread = new HandlerThread("d");
+            HandlerThread handlerThread = new HandlerThread("dispatchDataThread");
             handlerThread.start();
             handler = new Handler(handlerThread.getLooper());
             
@@ -83,9 +85,28 @@ public class SerialPortMgr {
       private Handler handler;
       
       public void onReceiveData(final int len, final byte[] data) {
+            Log.e(TAG, "onReceiveData: thread name = " + Thread.currentThread().getName());
             Log.e("serialport", "receiverData====index=" + (index++) + "    data=" + DataUtils.bytesToHexString(data, len));
-          /*  cycleQueue.copyData(len, data);
-            cycleQueue.parseData();*/
+            handler.post(new Runnable() {
+                  @Override
+                  public void run() {
+                        dispathData(data);
+                  }
+            });
+      }
+      
+      private void dispathData(byte[] data) {
+            Log.e(TAG, "dispathData: " + Thread.currentThread().getName());
+            int cmd = data[4] & 0xff;
+            SystemClock.sleep(1400);
+            switch (cmd) {
+                  case MsgCon.Cmd_Heart:
+                        Log.e(TAG, "dispathData: heart bean   ");
+                        break;
+                  case MsgCon.Cmd_Power:
+                        Log.e(TAG, "dispathData: heart power   ");
+                        break;
+            }
       }
       
 }

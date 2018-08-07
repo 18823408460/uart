@@ -26,4 +26,10 @@ public class DataUtils {
             }
             return stringBuilder.toString();
       }
+      
+      public static int getDataLen(byte hight, byte low) {
+            int iHight = hight & 0xff;
+            int iLow = low & 0xff;
+            return iHight * 256 + iLow;
+      }
 }

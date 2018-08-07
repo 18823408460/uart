@@ -29,12 +29,6 @@ public class JNIActivity extends Activity {
       private void testMgr() {
             final SerialPortMgr instance =  SerialPortMgr.getInstance();
             instance.initTtyDevice();
-            new Handler().postDelayed(new Runnable() {
-                  @Override
-                  public void run() {
-                        instance.close();
-                  }
-            },3000);
            
       }
       
