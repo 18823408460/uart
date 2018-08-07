@@ -80,11 +80,12 @@ public class SerialPortMgr {
       public native boolean close();
       
       private static int index = 0;
-      private Handler handler ;
+      private Handler handler;
+      
       public void onReceiveData(final int len, final byte[] data) {
             Log.e("serialport", "receiverData====index=" + (index++) + "    data=" + DataUtils.bytesToHexString(data, len));
-           /* cycleQueue.copyData(len, data);
-            cycleQueue.parseData();*/
+            cycleQueue.copyData(len, data);
+            cycleQueue.parseData();
       }
       
 }

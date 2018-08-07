@@ -42,7 +42,7 @@ public class CycleQueue {
             return result;
       }
       
-      public  void copyData(int len, byte buf[]) {
+      public void copyData(int len, byte buf[]) {
             int tailCanWrite = bufSize - tailIndex; //剩余的可写
             int i;
             if (len < tailCanWrite) { //如果可以装
@@ -64,14 +64,15 @@ public class CycleQueue {
       }
       
       int getIndex() {
-            headIndex++;
-            if (headIndex >= bufSize) {
-                  headIndex = 0;
+            int temp = headIndex;
+            if (temp >= bufSize) {
+                  temp = headIndex = 0;
             }
-            return headIndex;
+            headIndex++;
+            return temp;
       }
       
-      public  void parseData() {
+      public void parseData() {
             int canReadData;
             if (tailIndex > headIndex) {
                   canReadData = tailIndex - headIndex;
@@ -80,13 +81,15 @@ public class CycleQueue {
                   int tailLast = bufSize - headIndex;
                   canReadData = tailIndex + tailLast;
             }
-            //Log.e(TAG, "parseData: canreadData len = " + canReadData + "  tailIndex =" + tailIndex + "   headIndex=" + headIndex);
+           // Log.e(TAG, "parseData: canreadData len = " + canReadData + "  tailIndex =" + tailIndex + "   headIndex=" + headIndex);
             while (canReadData-- > 0) {
                   if (readHeadH == 0) {
-                        if (cacheBuf[getIndex()] == 0x08) {
+                        byte b = cacheBuf[getIndex()];
+                       // Log.e(TAG, "parseData: b=============" + b + "   headIndex=" + headIndex);
+                        if (b == 0x08) {
                               readHeadH = 1;
                               outBuf[outBufIndex++] = 0x08;
-                              Log.e(TAG, "parseData: read head h =================== ");
+                             // Log.e(TAG, "parseData: read head h =================== ");
                               continue;
                         }
                   }
@@ -94,7 +97,7 @@ public class CycleQueue {
                         if (cacheBuf[getIndex()] == 0x06) {
                               readHeadL = 1;
                               outBuf[outBufIndex++] = 0x06;
-                              Log.e(TAG, "parseData: read head l =================");
+                            //  Log.e(TAG, "parseData: read head l =================");
                               continue;
                         }
                   }
@@ -103,7 +106,7 @@ public class CycleQueue {
                               readLenH = 1;
                               dataLenH = cacheBuf[getIndex()];
                               outBuf[outBufIndex++] = (byte) dataLenH;
-                              Log.e(TAG, "parseData: read dataLenH  =================" + DataUtils.bytesToHexString((byte) dataLenH));
+                            //  Log.e(TAG, "parseData: read dataLenH  =================" + DataUtils.bytesToHexString((byte) dataLenH));
                               continue;
                         }
                         if (readLenH == 1 && readLenL == 0) {
@@ -117,6 +120,7 @@ public class CycleQueue {
                         if (readLenH == 1 && readLenL == 1) {
                               if (outBufIndex < (dataLen + 7)) {
                                     outBuf[outBufIndex++] = cacheBuf[getIndex()];
+                                 //   Log.e(TAG, "parseData: content==== " + outBufIndex);
                                     continue;
                               }
                               else {
@@ -129,10 +133,12 @@ public class CycleQueue {
                                     outBufIndex = 0;
                                     dataLenH = 0;
                                     dataLenL = 0;
-                                    break;
+                                    return;
                               }
                         }
+                        //Log.e(TAG, "parseData: 11111111111111111111: readLenH=" + readLenH + "  readLenL=" + readLenL);
                   }
+                 // Log.e(TAG, "parseData: 2222222222222222222: readHeadL=" + readHeadL + "   readHeadL=" + readHeadL);
             }
       }
       

@@ -261,7 +261,7 @@ void *threadreadTtyData(void *arg) {
                 if (FD_ISSET(fd, &readfd)) {/* 先判断一下mTty这外被监视的句柄是否真的变成可读的了 */
                     int len = read(fd, inBuf, sizeof(inBuf));
                     if (len > 0 && len < 512) {
-                        LOGE("--------------len ============= %d", len);
+                        //LOGE("--------------len ============= %d", len);
                         (*env)->SetByteArrayRegion(env,bytes,0,len,inBuf);
                         (*env)->CallVoidMethod(env,g_obj,jmethodID1,len,bytes);
 
@@ -269,6 +269,7 @@ void *threadreadTtyData(void *arg) {
 //                        (*env)->ReleaseByteArrayElements(env,bytes,c_array,len);
                         //copyData(len, inBuf);
                         //parseData();
+                        usleep(200);
                     } else {
                         usleep(100);
                     }
@@ -290,7 +291,15 @@ void *threadreadTtyData(void *arg) {
 
 
 
-
+/**
+ * https://www.cnblogs.com/winfu/p/5629873.html
+ * @param env  jni中使用到了线程 和 管道，最开始打算使用线程和消息队列，可是失败了，android不支持消息队列
+ * @param obj
+ * @param path
+ * @param baudrate
+ * @param flag
+ * @return
+ */
 /*
  * Class:     com_uurobot_serialportcompiler_jniTest_SerialPortMgr
  * Method:    open
