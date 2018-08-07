@@ -60,7 +60,12 @@ F:/github/uartTest/uart/SerialPortCompiler/app/src/main//obj/local/armeabi-v7a/o
  D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/pthread.h \
  D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/time.h \
  D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/sched.h \
+ D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/stdlib.h \
+ D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/alloca.h \
+ D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/strings.h \
+ D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/memory.h \
  D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/stdio.h \
+ D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/math.h \
  D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/android/log.h
 
 F:/github/uartTest/uart/SerialPortCompiler/app/src/main//jni/termios.h:
@@ -183,6 +188,16 @@ D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/time
 
 D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/sched.h:
 
+D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/stdlib.h:
+
+D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/alloca.h:
+
+D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/strings.h:
+
+D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/memory.h:
+
 D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/stdio.h:
+
+D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/math.h:
 
 D:/oldPC/soft/ndk/android_ndk_r10b/platforms/android-3/arch-arm/usr/include/android/log.h:

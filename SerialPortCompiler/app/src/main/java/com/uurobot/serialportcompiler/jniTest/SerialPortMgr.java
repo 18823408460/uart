@@ -1,6 +1,11 @@
 package com.uurobot.serialportcompiler.jniTest;
 
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
+
+import com.uurobot.serialportcompiler.utils.CycleQueue;
+import com.uurobot.serialportcompiler.utils.DataUtils;
 
 import java.io.File;
 
@@ -19,7 +24,10 @@ public class SerialPortMgr {
       private File device;
       
       public SerialPortMgr() {
-      
+            HandlerThread handlerThread = new HandlerThread("d");
+            handlerThread.start();
+            handler = new Handler(handlerThread.getLooper());
+            
       }
       
       public void initTtyDevice() {
@@ -60,6 +68,7 @@ public class SerialPortMgr {
                 return serialPortMgr;
         }*/
       
+      private CycleQueue cycleQueue = new CycleQueue();
       
       //-----------jni相关---------------//
       public native boolean open(String path, int baudrate, int flags);
@@ -70,7 +79,12 @@ public class SerialPortMgr {
       
       public native boolean close();
       
-      public void onReceiveData() {
-            Log.e("serialport", "receiverData。。。" + Thread.currentThread().getName());
+      private static int index = 0;
+      private Handler handler ;
+      public void onReceiveData(final int len, final byte[] data) {
+            Log.e("serialport", "receiverData====index=" + (index++) + "    data=" + DataUtils.bytesToHexString(data, len));
+           /* cycleQueue.copyData(len, data);
+            cycleQueue.parseData();*/
       }
+      
 }

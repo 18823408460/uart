@@ -19,7 +19,7 @@ public class SecondActivity extends Activity {
       protected void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
       
-            testClassLoader();
+            testStr();
       }
       
       private void testClassLoader() {
@@ -51,6 +51,11 @@ public class SecondActivity extends Activity {
             dataType.native_char('c');
             dataType.native_obj(myclass);
       }
+      private void testStr() {
+            DynamicReg dynamicReg = new DynamicReg();
+            String s = dynamicReg.native_hello();
+      }
+      
       
       private void testDynamic() {
             DynamicReg dynamicReg = new DynamicReg();
