@@ -16,14 +16,14 @@ import java.io.File;
 public class SerialPortMgr {
       
       private static final String TAG = "SerialPortMgr";
-
-//        private static SerialPortMgr serialPortMgr;
+      
+      private static SerialPortMgr serialPortMgr;
       
       private final String ttyName = "/dev/ttyS3";
       
       private File device;
       
-      public SerialPortMgr() {
+      private SerialPortMgr() {
             HandlerThread handlerThread = new HandlerThread("d");
             handlerThread.start();
             handler = new Handler(handlerThread.getLooper());
@@ -55,18 +55,18 @@ public class SerialPortMgr {
                   Log.e(TAG, "open success......");
             }
       }
-
-
- /*       public static SerialPortMgr getInstance() {
-                if (serialPortMgr == null) {
-                        synchronized (SerialPortMgr.class) {
-                                if (serialPortMgr == null) {
-                                        serialPortMgr = new SerialPortMgr();
-                                }
+      
+      
+      public static SerialPortMgr getInstance() {
+            if (serialPortMgr == null) {
+                  synchronized (SerialPortMgr.class) {
+                        if (serialPortMgr == null) {
+                              serialPortMgr = new SerialPortMgr();
                         }
-                }
-                return serialPortMgr;
-        }*/
+                  }
+            }
+            return serialPortMgr;
+      }
       
       private CycleQueue cycleQueue = new CycleQueue();
       
@@ -84,8 +84,8 @@ public class SerialPortMgr {
       
       public void onReceiveData(final int len, final byte[] data) {
             Log.e("serialport", "receiverData====index=" + (index++) + "    data=" + DataUtils.bytesToHexString(data, len));
-            cycleQueue.copyData(len, data);
-            cycleQueue.parseData();
+          /*  cycleQueue.copyData(len, data);
+            cycleQueue.parseData();*/
       }
       
 }

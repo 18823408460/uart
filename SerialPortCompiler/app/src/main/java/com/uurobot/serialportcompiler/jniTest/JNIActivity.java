@@ -27,9 +27,15 @@ public class JNIActivity extends Activity {
       }
       
       private void testMgr() {
-            SerialPortMgr instance = new SerialPortMgr();
+            final SerialPortMgr instance =  SerialPortMgr.getInstance();
             instance.initTtyDevice();
-            instance.close();
+            new Handler().postDelayed(new Runnable() {
+                  @Override
+                  public void run() {
+                        instance.close();
+                  }
+            },3000);
+           
       }
       
       private void testStr() {
