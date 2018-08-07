@@ -106,7 +106,7 @@ public class CycleQueue {
                               readLenH = 1;
                               dataLenH = cacheBuf[getIndex()];
                               outBuf[outBufIndex++] = (byte) dataLenH;
-                            //  Log.e(TAG, "parseData: read dataLenH  =================" + DataUtils.bytesToHexString((byte) dataLenH));
+                            //  Log.e(TAG, "parseData: read dataLenH  =================" + SendDataThread.bytesToHexString((byte) dataLenH));
                               continue;
                         }
                         if (readLenH == 1 && readLenL == 0) {
@@ -114,7 +114,7 @@ public class CycleQueue {
                               dataLenL = cacheBuf[getIndex()];
                               dataLen = dataLenH * 256 + dataLenL;
                               outBuf[outBufIndex++] = (byte) dataLenL;
-                              //Log.e(TAG, "parseData: read dataLenL  =================" + DataUtils.bytesToHexString((byte) dataLenL) + "   len=" + dataLenL);
+                              //Log.e(TAG, "parseData: read dataLenL  =================" + SendDataThread.bytesToHexString((byte) dataLenL) + "   len=" + dataLenL);
                               continue;
                         }
                         if (readLenH == 1 && readLenL == 1) {
