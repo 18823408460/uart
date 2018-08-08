@@ -72,6 +72,7 @@ public class JNIActivity extends Activity {
             for (byte[] data : hello) {
                   System.out.println(": " + DataUtils.bytesToHexString(data));
                   serialPortMgr.uartSend(data);
+                  break;
             }
             
       }
