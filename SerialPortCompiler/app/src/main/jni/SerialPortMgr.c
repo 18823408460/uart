@@ -40,6 +40,8 @@ jclass jclass1;
 jmethodID jmethodID1;
 jbyteArray bytes;
 JNIEnv *env;
+jbyte headH = 0x08;
+jbyte headL = 0x06;
 // https://juejin.im/post/5b4c0a09f265da0f955cc1c7?utm_source=gold_browser_extension
 
 static speed_t getBaudrate(jint baudrate) {
@@ -142,17 +144,17 @@ void parseData() {
     while (canReadData-- > 0) {
         if (readHeadH == 0) {
             // Log.e(TAG, "parseData: b=============" + b + "   headIndex=" + headIndex);
-            if (cacheBuf[getIndex()] == 0x08) {
+            if (cacheBuf[getIndex()] == headH) {
                 readHeadH = 1;
-                outBuf[outBufIndex++] = 0x08;
+                outBuf[outBufIndex++] = headH;
                 // Log.e(TAG, "parseData: read head h =================== ");
                 continue;
             }
         }
         if (readHeadH == 1 && readHeadL == 0) {
-            if (cacheBuf[getIndex()] == 0x06) {
+            if (cacheBuf[getIndex()] == headL) {
                 readHeadL = 1;
-                outBuf[outBufIndex++] = 0x06;
+                outBuf[outBufIndex++] = headL;
                 //  Log.e(TAG, "parseData: read head l =================");
                 continue;
             }
@@ -298,6 +300,7 @@ JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPor
         jboolean iscopy;
         const char *path_utf = (*env)->GetStringUTFChars(env, path, &iscopy);
         LOGD("Opening serial port %s", path_utf);
+//        fd = open(path_utf, O_RDWR | flag);  //这样也可以
         fd = open(path_utf, O_RDWR | O_SYNC);  //O_DIRECT选项    会报错
         LOGD("open() fd = %d", fd);
         (*env)->ReleaseStringUTFChars(env, path, path_utf);
@@ -370,6 +373,13 @@ JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPor
     return 0;
 }
 
+JNIEXPORT void JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPortMgr_init
+        (JNIEnv *env, jobject obj, jbyte h, jbyte l) {
+    headH = h;
+    headL = l;
+    LOGE("--------------------init-------------h=%d, l = %d", headH, headL);
+}
+
 JNIEXPORT jint JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPortMgr_uartSend
         (JNIEnv *env, jobject obj, jbyteArray jbyteArray1) {
     if (fd == -1) {
@@ -377,10 +387,16 @@ JNIEXPORT jint JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPortMgr
     }
     jint len = (*env)->GetArrayLength(env, jbyteArray1);
     LOGE("send  data len ========= %d", len);
-    char buff[len];
-    memcpy(buff, jbyteArray1, len);
+    unsigned char buff[len];
+    memset(buff, 0, len);
+
+//    memcpy(buff, jbyteArray1, len);/这样有问题
+    (*env)->GetByteArrayRegion(env, jbyteArray1, 0, len, buff);
+    int i = 0;
+    for (i = 0; i < len; ++i) {
+        LOGE("------------------------write data ===== %d", buff[i]);
+    }
     len = write(fd, buff, len);
-    usleep(100); //写完之后睡
     if (len > 0) {
         LOGI("write device success len= %d", len);
         return len;

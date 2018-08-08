@@ -83,6 +83,8 @@ public class SerialPortMgr {
       
       public native boolean close();
       
+      public native void init(byte headH, byte headL);
+      
       private static int index = 0;
       private Handler handler;
       
