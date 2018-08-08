@@ -15,6 +15,7 @@ import com.uurobot.serialportcompiler.utils.EncodeUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.LinkedList;
 
 import android_serialport_api.SerialPort;
@@ -33,13 +34,43 @@ public class JNIActivity extends Activity {
             new Handler().postDelayed(new Runnable() {
                   @Override
                   public void run() {
-                        testMgrOld();
+                        try {
+                              testMgrOld();
+                        }
+                        catch (IOException e) {
+                              e.printStackTrace();
+                        }
                   }
             }, 5000);
       }
       
-      private void testMgrOld() {
-      
+      int msgtype = 14 ;
+      private void testMgrOld() throws IOException {
+            final String msg = "hello world今天的天气的怎么样，今天的天气是非常的好，我是非常的喜欢，但是如果我们真的很好很好，世界就是很好很好,如果明天的天气" +
+                                       "很好，我就去周游世界，哇哇，非常非常的期待啊，只要你开心，世界就是美好的，明天就是晴天；2我就去周游世界，哇哇，非常非常的期待啊，" +
+                                       "只要你开心，世界就是美好的，明天就是晴天；3我就去周游世界，哇哇，非常非常的期待啊，只要你开心，世界就是美好的，明天就是晴天";
+            final Handler handler = new Handler();
+            SerialPort mSerialPortFpga = new SerialPort(new File("/dev/ttyS3"), 115200, 0);
+            final OutputStream mOutputStreamFpga = mSerialPortFpga.getOutputStream();
+            
+            handler.post(new Runnable() {
+                  @Override
+                  public void run() {
+                        LinkedList<byte[]> hello = EncodeUtil.getTouchuanData(msgtype++, msg);
+                        for (byte[] data : hello) {
+                              try {
+                                    mOutputStreamFpga.write(data);
+                                    System.out.println(": " + DataUtils.bytesToHexString(data));
+                                    byte[] touchuanData3 = EncodeUtil.getUnpackData(msgtype++, "ddd");
+                                    mOutputStreamFpga.write(touchuanData3);
+                              }
+                              catch (IOException e) {
+                                    e.printStackTrace();
+                              }
+                        }
+                        handler.postDelayed(this, 1000);
+                  }
+            });
       }
       
       private void sendTest() {
@@ -79,7 +110,7 @@ public class JNIActivity extends Activity {
       
       public void send(View v) {
             final String msg = "hello world今天的天气的怎么样，今天的天气是非常的好，我是非常的喜欢，但是如果我们真的很好很好，世界就是很好很好,如果明天的天气" +
-                                 "很好，我就去周游世界，哇哇，非常非常的期待啊，只要你开心，世界就是美好的，明天就是晴天；2我就去周游世界，哇哇，非常非常的期待啊，" +
+                                       "很好，我就去周游世界，哇哇，非常非常的期待啊，只要你开心，世界就是美好的，明天就是晴天；2我就去周游世界，哇哇，非常非常的期待啊，" +
                                        "只要你开心，世界就是美好的，明天就是晴天；3我就去周游世界，哇哇，非常非常的期待啊，只要你开心，世界就是美好的，明天就是晴天";
             /*final Handler handler = new Handler();
             handler.post(new Runnable() {
