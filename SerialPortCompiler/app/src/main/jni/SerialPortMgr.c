@@ -372,12 +372,11 @@ JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPor
 
 JNIEXPORT jint JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPortMgr_uartSend
         (JNIEnv *env, jobject obj, jbyteArray jbyteArray1) {
-    LOGE("--------------------send--------------------");
     if (fd == -1) {
         return -1;
     }
     jint len = (*env)->GetArrayLength(env, jbyteArray1);
-    LOGE("data len ========= %d", len);
+    LOGE("send  data len ========= %d", len);
     char buff[len];
     memcpy(buff, jbyteArray1, len);
     len = write(fd, buff, len);
