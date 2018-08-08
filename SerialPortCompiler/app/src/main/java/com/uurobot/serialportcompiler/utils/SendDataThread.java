@@ -1,5 +1,11 @@
 package com.uurobot.serialportcompiler.utils;
 
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.text.TextUtils;
+
+import com.uurobot.serialportcompiler.jniTest.SerialPortMgr;
+
 /**
  * Created by Administrator on 2018/8/7.
  * 消息最终通过消息队列发送
@@ -9,27 +15,25 @@ package com.uurobot.serialportcompiler.utils;
  * 2.
  */
 public class SendDataThread {
-    private SerialPortMgr serialPortMgr;
-    private Handler handler;
-
-    public SendDataThread() {
-        HandlerThread handlerThread = new HandlerThread("sendDataThread");
-        handlerThread.start();
-        handler = new Handler(handlerThread.getLooper());
-    }
-
-    public void sendData(List<Pkg> pkgList) {
-        for (Pkg pkg : pkgList) {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    dispathEvent(pkg);
-                }
-            });
-        }
-    }
-
-    private void pullData(Pkg pkg) {
-
-    }
+      private SerialPortMgr serialPortMgr;
+      private Handler handler;
+      
+      public SendDataThread() {
+            HandlerThread handlerThread = new HandlerThread("sendDataThread");
+            handlerThread.start();
+            handler = new Handler(handlerThread.getLooper());
+      }
+      
+      /**
+       * 发送透传数据
+       *
+       * @param pkg
+       */
+      public void sendTouChuanData(TouchuanPkg pkg) {
+      
+      }
+      
+      private void pullData(TouchuanPkg pkg) {
+      
+      }
 }

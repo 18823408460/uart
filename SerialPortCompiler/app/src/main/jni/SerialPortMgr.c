@@ -22,7 +22,7 @@ static const char *TAG = "SerialPortMgrNative";
 #define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_DEBUG, TAG, fmt, ##args)
 #define LOGE(fmt, args...) __android_log_print(ANDROID_LOG_ERROR, TAG, fmt, ##args)
 #define  bufSize 1024
-int fd;
+int fd = -1;
 static jobject g_obj;
 static JavaVM *gVm;
 int readHeadH = 0;
@@ -368,6 +368,27 @@ JNIEXPORT jboolean JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPor
     isStopReceiver = 0;
     close(fd);
     return 0;
+}
+
+JNIEXPORT jint JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPortMgr_uartSend
+        (JNIEnv *env, jobject obj, jbyteArray jbyteArray1) {
+    LOGE("--------------------send--------------------");
+    if (fd == -1) {
+        return -1;
+    }
+    jint len = (*env)->GetArrayLength(env, jbyteArray1);
+    LOGE("data len ========= %d", len);
+    char buff[len];
+    memcpy(buff, jbyteArray1, len);
+    len = write(fd, buff, len);
+    usleep(100); //写完之后睡
+    if (len > 0) {
+        LOGI("write device success len= %d", len);
+        return len;
+    } else {
+        LOGE("write device error");
+    }
+    return -1;
 }
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
