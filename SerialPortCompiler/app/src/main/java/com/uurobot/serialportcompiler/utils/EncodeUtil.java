@@ -12,7 +12,7 @@ public class EncodeUtil {
       public static final int UnPack = 0; //不分包
       public static final int Pack = 1; // 分包
       private static int pkgId = 0;
-      private static final int defaultPkgSize = 10;
+      private static final int defaultPkgSize = 233; // 233（249实际发送--胸口发送到头上）最大
       
       
       private static int getPkgId() {

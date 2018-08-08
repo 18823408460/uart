@@ -392,11 +392,8 @@ JNIEXPORT jint JNICALL Java_com_uurobot_serialportcompiler_jniTest_SerialPortMgr
 
 //    memcpy(buff, jbyteArray1, len);/这样有问题
     (*env)->GetByteArrayRegion(env, jbyteArray1, 0, len, buff);
-    int i = 0;
-    for (i = 0; i < len; ++i) {
-        LOGE("------------------------write data ===== %d", buff[i]);
-    }
     len = write(fd, buff, len);
+    usleep(100);
     if (len > 0) {
         LOGI("write device success len= %d", len);
         return len;
