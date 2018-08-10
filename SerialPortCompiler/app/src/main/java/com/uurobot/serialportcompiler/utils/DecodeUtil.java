@@ -74,19 +74,21 @@ public class DecodeUtil {
                   System.out.println("----------- is pkg --------------" + DataUtils.bytesToHexString(data));
                   int msgType = getMsgType(data);
                   int pkgCount = getPkgCount(data);
-                  PkgData pkgData = pkgDataHashMap.get(msgType);
+                  int pkgId = getPkgId(data);
+                  PkgData pkgData = pkgDataHashMap.get(pkgId);
                   if (pkgData == null) { //从来没有组包
                         PkgData pkgData1 = new PkgData(pkgCount);
+                        pkgData1.setMsgType(msgType);
                         int pkgPos = getPkgPos(data);
                         pkgData1.addData(pkgPos, getPkgDataBytes(data));
-                        pkgDataHashMap.put(msgType, pkgData1);
+                        pkgDataHashMap.put(pkgId, pkgData1);
                   }
                   else {
                         int pkgPos = getPkgPos(data);
                         boolean b = pkgData.addData(pkgPos, getPkgDataBytes(data));
                         if (b) {
                               System.out.println("hashmap size 0 === " + pkgDataHashMap.size());
-                              pkgDataHashMap.remove(msgType);
+                              pkgDataHashMap.remove(pkgId);
                               System.out.println("hashmap size=== " + pkgDataHashMap.size());
                         }
                   }

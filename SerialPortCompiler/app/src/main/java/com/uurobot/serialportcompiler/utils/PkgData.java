@@ -19,6 +19,14 @@ public class PkgData {
       private int pkgLen;
       private int dataLen = 0;
       
+      public void setPkgId(int pkgId) {
+            this.pkgId = pkgId;
+      }
+      
+      public void setMsgType(int msgType) {
+            this.msgType = msgType;
+      }
+      
       public PkgData(int len) {
             list = new SparseArray<>(len);
             this.pkgLen = len;
