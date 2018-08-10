@@ -24,7 +24,7 @@ public class MsgConHead {
       public static class Cmd {
             public static final int Power = 0x90;
             public static final int Heart = 0x94;
-            public static final int TouChuan = 0xE2;
+            public static final int TouChuan = 0xdb;
       }
       
       public static class Event {

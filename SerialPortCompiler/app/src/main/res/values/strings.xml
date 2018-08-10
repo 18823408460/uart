@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SerialPortCompiler</string>
+    <string name="title_activity_wifi">WifiActivity</string>
 </resources>

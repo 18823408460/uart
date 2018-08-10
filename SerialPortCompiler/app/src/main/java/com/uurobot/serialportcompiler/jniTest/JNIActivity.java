@@ -53,7 +53,7 @@ public class JNIActivity extends Activity {
             SerialPort mSerialPortFpga = new SerialPort(new File("/dev/ttyS3"), 115200, 0);
             final OutputStream mOutputStreamFpga = mSerialPortFpga.getOutputStream();
             
-            handler.post(new Runnable() {
+            /*handler.post(new Runnable() {
                   @Override
                   public void run() {
                         LinkedList<byte[]> hello = EncodeUtil.getTouchuanData(msgtype++, msg);
@@ -70,7 +70,7 @@ public class JNIActivity extends Activity {
                         }
                         handler.postDelayed(this, 1000);
                   }
-            });
+            });*/
       }
       
       private void sendTest() {
