@@ -2,6 +2,8 @@ package com.uurobot.serialportcompiler.newCode.pkg;
 
 import com.uurobot.serialportcompiler.newCode.excption.UARTException;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2018/8/10.
  */
@@ -12,7 +14,7 @@ public interface Packet {
        *
        * @return
        */
-      public abstract byte[] encodeBytes() throws UARTException;
+      public abstract List<byte[]> encodeBytes() throws UARTException;
       
       /**
        * 从byte数组解码数据包

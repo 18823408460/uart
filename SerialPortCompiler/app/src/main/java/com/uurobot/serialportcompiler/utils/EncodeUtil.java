@@ -120,7 +120,7 @@ public class EncodeUtil {
                                     linkedList.add(packData);
                               }
                               byte[] buf2 = new byte[packCountLast];
-                              System.arraycopy(contentBytes, packCount * defaultPkgSize-1 , buf2, 0, packCountLast);
+                              System.arraycopy(contentBytes, packCount * defaultPkgSize - 1, buf2, 0, packCountLast);
                               byte[] packData = getPackData(msgType, buf2, (byte) pkgId, (byte) packCountAll, (byte) packCount);
                               linkedList.add(packData);
                         }
@@ -153,7 +153,7 @@ public class EncodeUtil {
             return true;
       }
       
-      private static byte getCheckData(byte[] data) {
+      public static byte getCheckData(byte[] data) {
             byte sum = 0;
             int checkLen = data.length - 3;
             for (int i = 4; i < checkLen; i++) {

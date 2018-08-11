@@ -1,5 +1,7 @@
 package com.uurobot.serialportcompiler.newCode.pkg;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2018/8/10.
  */
@@ -12,8 +14,8 @@ public class ACKPacket extends MsgPacket {
       }
       
       @Override
-      protected byte[] getContent() {
-            return MsgPacket.RESERVED_DATA;
+      protected List<byte[]> getContent() {
+            return null;
       }
       
       @Override

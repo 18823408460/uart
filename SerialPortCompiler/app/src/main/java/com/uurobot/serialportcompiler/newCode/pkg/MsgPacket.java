@@ -2,6 +2,8 @@ package com.uurobot.serialportcompiler.newCode.pkg;
 
 import com.uurobot.serialportcompiler.newCode.excption.UARTException;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2018/8/10.
  */
@@ -30,6 +32,10 @@ public abstract class MsgPacket implements Packet {
             }
       }
       
+      public static int addId() {
+            return seqIDAchor++;
+      }
+      
       /**
        * 获取消息ID
        *
@@ -51,7 +57,7 @@ public abstract class MsgPacket implements Packet {
       
       public abstract byte getMsgType();
       
-      protected abstract byte[] getContent();
+      protected abstract List<byte[]> getContent();
       
       protected abstract void decodeContent(byte[] data);
       
@@ -66,12 +72,12 @@ public abstract class MsgPacket implements Packet {
       }
       
       @Override
-      public byte[] encodeBytes() throws UARTException {
-            return new byte[0];
+      public List<byte[]> encodeBytes() throws UARTException {
+            return getContent();
       }
       
       @Override
       public Packet decodeBytes(byte[] rawData) throws UARTException {
-            return null;
+            return decodeBytes(rawData);
       }
 }

@@ -2,6 +2,9 @@ package com.uurobot.serialportcompiler.newCode.pkg;
 
 import android.util.Base64;
 
+import com.uurobot.serialportcompiler.newCode.bean.StringMsgBean;
+import com.uurobot.serialportcompiler.newCode.pkg.msgPkg.TouChuanPacket;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +21,12 @@ public class PacketBuilder {
       public static MsgPacket obtainHandShakeMsg() {
 //            return new HandShakePacket();
             return null;
+      }
+      
+      public static MsgPacket obtainTouchuanMsg(int msgType, String data) {
+            TouChuanPacket touChuanPacket = new TouChuanPacket();
+            touChuanPacket.setStringMsgBean(new StringMsgBean(msgType, data));
+            return touChuanPacket;
       }
       
       

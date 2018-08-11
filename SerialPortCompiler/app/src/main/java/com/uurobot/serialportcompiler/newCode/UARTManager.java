@@ -242,10 +242,9 @@ public class UARTManager {
             int retry_count = 0;
             do {
                   try {
-                        byte[] encodeBytes = packet.encodeBytes();
-                        int status = UARTConnector.send(encodeBytes);
-                        if (status == 0) {
-                              break;
+                        List<byte[]> list = packet.encodeBytes();
+                        for (byte[] data : list) {
+                              int status = UARTConnector.send(data);
                         }
                   }
                   catch (UARTException e) {

@@ -1,14 +1,19 @@
 package com.uurobot.serialportcompiler.newCode.pkg;
 
+import com.uurobot.serialportcompiler.constant.MsgConChest;
+import com.uurobot.serialportcompiler.newCode.excption.UARTException;
+import com.uurobot.serialportcompiler.newCode.pkg.msgPkg.TouChuanPacket;
+
 /**
  * Created by Administrator on 2018/8/10.
  */
 
 public class PacketParseUtil {
-      public static MsgPacket parse(byte[] rawData) {
-            byte packetType = rawData[0];
+      public static MsgPacket parse(byte[] rawData) throws UARTException {
+            int packetType = rawData[0] & 0xff;
             switch (packetType) {
-            
+                  case MsgConChest.Event.TouChuan:
+                        return (MsgPacket) new TouChuanPacket().decodeBytes(rawData);
             }
            /* switch (packetType) {
                   case MsgPacket.AIUI_PACKET_TYPE:
