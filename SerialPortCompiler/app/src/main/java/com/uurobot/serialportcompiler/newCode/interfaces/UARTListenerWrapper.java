@@ -6,6 +6,8 @@ import com.uurobot.serialportcompiler.newCode.pkg.MsgPacket;
 
 /**
  * Created by Administrator on 2018/8/10.
+ * <p>
+ * 所有的msg 通过Callbacker 发送
  */
 
 public class UARTListenerWrapper implements RequestListener {
@@ -21,9 +23,10 @@ public class UARTListenerWrapper implements RequestListener {
       
       @Override
       public void onReqeust(MsgPacket packet) {
-            if(packet.getMsgType() != MsgPacket.HANDSHAKE_REQ_TYPE){
+            if (packet.getMsgType() != MsgPacket.HANDSHAKE_REQ_TYPE) {
                   mCallbacker.notifyRequest(mListener, packet);
-            }else{
+            }
+            else {
                   mUartManager.reset();
             }
       }

@@ -4,9 +4,12 @@ package com.uurobot.serialportcompiler.newCode.pkg;
  * Created by Administrator on 2018/8/10.
  */
 
-public class PacketUtil {
+public class PacketParseUtil {
       public static MsgPacket parse(byte[] rawData) {
             byte packetType = rawData[0];
+            switch (packetType) {
+            
+            }
            /* switch (packetType) {
                   case MsgPacket.AIUI_PACKET_TYPE:
                         return (MsgPacket)new AIUIPacket().decodeBytes(rawData);

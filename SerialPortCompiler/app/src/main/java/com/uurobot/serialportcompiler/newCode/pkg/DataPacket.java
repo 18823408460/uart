@@ -4,11 +4,14 @@ import com.uurobot.serialportcompiler.newCode.excption.UARTException;
 
 /**
  * Created by Administrator on 2018/8/10.
+ * <p>
+ * 包含完整协议的数据，，，最终发到串口的
  */
 
 public class DataPacket implements Packet {
       public MsgPacket data;
       protected final static byte SYNC_BYTE = (byte) 0xa5;
+      
       @Override
       public byte[] encodeBytes() throws UARTException {
             return new byte[0];
@@ -24,6 +27,7 @@ public class DataPacket implements Packet {
             ret.data = data;
             return ret;
       }
+      
       public static boolean isValid(byte[] data) {
             return checkCode(data, 0, data.length - 2) == data[data.length - 1];
       }

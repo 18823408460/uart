@@ -8,10 +8,9 @@ import com.uurobot.serialportcompiler.newCode.interfaces.RequestListener;
 import com.uurobot.serialportcompiler.newCode.pkg.DataPacket;
 import com.uurobot.serialportcompiler.newCode.pkg.MsgPacket;
 import com.uurobot.serialportcompiler.newCode.pkg.Packet;
-import com.uurobot.serialportcompiler.newCode.pkg.PacketUtil;
+import com.uurobot.serialportcompiler.newCode.pkg.PacketParseUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -65,7 +64,6 @@ public class UARTManager {
                                     sendPacket(entity.getPacket());
                                     if (entity.isNeedAck()) {
                                           entity.increaseRetryCoutn();
-                                          ;
                                           entity.setLastSendTime(currentTime);
                                     }
                                     else {
@@ -119,8 +117,8 @@ public class UARTManager {
             }
             final MsgPacket msgPacket = dataPacket.data;
             if (msgPacket.isReqType() && msgPacket.getMsgType() != MsgPacket.HANDSHAKE_REQ_TYPE && mReceivePool.contains(msgPacket.getSeqID())) {
-                  DataPacket ackPacket = PacketUtil.getAckMsg(msgPacket);
-                  sendResponse(ackPacket);
+                  DataPacket ackPacket = PacketParseUtil.getAckMsg(msgPacket);
+                  sendResponse(ackPacket); //收到重复的消息（因为对方没有收到响应），所以这里只发送响应就可以
                   return;
             }
             
@@ -198,7 +196,7 @@ public class UARTManager {
                   public void run() {
                         if (mRequestListener == null)
                               return;
-                        DataPacket ackPacket = PacketUtil.getAckMsg(packet);
+                        DataPacket ackPacket = PacketParseUtil.getAckMsg(packet);
                         sendResponse(ackPacket);
                         mRequestListener.onReqeust(packet);
                   }

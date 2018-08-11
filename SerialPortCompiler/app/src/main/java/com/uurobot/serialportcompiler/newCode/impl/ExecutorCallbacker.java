@@ -2,6 +2,7 @@ package com.uurobot.serialportcompiler.newCode.impl;
 
 import com.uurobot.serialportcompiler.newCode.UARTEvent;
 import com.uurobot.serialportcompiler.newCode.UARTEventListener;
+import com.uurobot.serialportcompiler.newCode.bean.UARTConstant;
 import com.uurobot.serialportcompiler.newCode.interfaces.Callbacker;
 import com.uurobot.serialportcompiler.newCode.pkg.MsgPacket;
 
@@ -30,13 +31,25 @@ public class ExecutorCallbacker implements Callbacker {
       }
       
       @Override
-      public void notifyRequest(UARTEventListener listener, MsgPacket packet) {
-      
+      public void notifyRequest(final UARTEventListener listener, final MsgPacket packet) {
+            postCallback(new Runnable() {
+                  
+                  @Override
+                  public void run() {
+                        listener.onEvent(new UARTEvent(UARTConstant.EVENT_MSG, packet));
+                  }
+            });
       }
       
       @Override
-      public void notifyEvent(UARTEventListener listener, UARTEvent event) {
-      
+      public void notifyEvent(final UARTEventListener listener, final UARTEvent event) {
+            postCallback(new Runnable() {
+                  
+                  @Override
+                  public void run() {
+                        listener.onEvent(event);
+                  }
+            });
       }
       
       private void postCallback(Runnable r) {
