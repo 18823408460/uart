@@ -29,8 +29,8 @@ public class MsgConChest {
       }
       
       public static class Event {
-            public static final int Power = 0x90;
-            public static final int Heart = 0x94;
-            public static final int TouChuan = 0x84;
+            public static final byte Power = (byte) 0x90;
+            public static final byte Heart = (byte) 0x94;
+            public static final byte TouChuan = (byte) 0x84;
       }
 }

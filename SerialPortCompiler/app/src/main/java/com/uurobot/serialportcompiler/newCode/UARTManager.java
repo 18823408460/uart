@@ -1,5 +1,8 @@
 package com.uurobot.serialportcompiler.newCode;
 
+import android.util.Log;
+
+import com.uurobot.serialportcompiler.constant.MsgConChest;
 import com.uurobot.serialportcompiler.newCode.bean.PacketEntity;
 import com.uurobot.serialportcompiler.newCode.excption.UARTException;
 import com.uurobot.serialportcompiler.newCode.interfaces.ActionListener;
@@ -9,6 +12,7 @@ import com.uurobot.serialportcompiler.newCode.pkg.DataPacket;
 import com.uurobot.serialportcompiler.newCode.pkg.MsgPacket;
 import com.uurobot.serialportcompiler.newCode.pkg.Packet;
 import com.uurobot.serialportcompiler.newCode.pkg.PacketParseUtil;
+import com.uurobot.serialportcompiler.utils.DataUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,6 +32,7 @@ import java.util.concurrent.ThreadFactory;
  */
 
 public class UARTManager {
+      private static final String TAG = "UARTManager";
       private static UARTManager sManager;
       private ExecutorService mMainExecutor;
       private volatile boolean mIsRunning = false;
@@ -103,7 +108,7 @@ public class UARTManager {
       public void onReceive(byte[] data) {
             if (data == null)
                   return;
-            
+            Log.i(TAG, "onReceive: " + DataUtils.bytesToHexString(data));
             if (!DataPacket.isValid(data)) {
                   return;
             }
@@ -116,7 +121,7 @@ public class UARTManager {
                   return;
             }
             final MsgPacket msgPacket = dataPacket.data;
-            if (msgPacket.isReqType() && msgPacket.getPkgCmdType() != MsgPacket.HANDSHAKE_REQ_TYPE && mReceivePool.contains(msgPacket.getSeqID())) {
+            if (msgPacket.isReqType() && msgPacket.getPkgCmdType() != MsgConChest.Event.Heart && mReceivePool.contains(msgPacket.getSeqID())) {
                   DataPacket ackPacket = PacketParseUtil.getAckMsg(msgPacket);
                   sendResponse(ackPacket); //收到重复的消息（因为对方没有收到响应），所以这里只发送响应就可以
                   return;

@@ -39,7 +39,7 @@ public class TouChuanPacket extends MsgPacket {
       
       @Override
       public byte getPkgCmdType() {
-            return TOUCHUAN_MSG_TYPE;
+            return MsgConChest.Event.TouChuan;
       }
       
       //编码时使用

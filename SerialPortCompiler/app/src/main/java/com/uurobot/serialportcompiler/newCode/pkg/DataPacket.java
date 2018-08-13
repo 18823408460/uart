@@ -19,7 +19,6 @@ import java.util.List;
 public class DataPacket implements Packet {
       private static final int defaultLen = 7;
       public MsgPacket data;
-      protected final static byte SYNC_BYTE = (byte) 0xa5;
       
       @Override
       public List<byte[]> encodeBytes() throws UARTException {
@@ -59,7 +58,7 @@ public class DataPacket implements Packet {
       }
       
       public static boolean isValid(byte[] data) {
-            return checkCode(data, 0, data.length - 2) == data[data.length - 1];
+            return checkCode(data, 4, data.length - 4) == data[data.length - 3];
       }
       
       private static byte checkCode(byte[] data, int start, int end) {
@@ -67,7 +66,8 @@ public class DataPacket implements Packet {
             for (int index = 0; index <= end; index++) {
                   sum += data[index];
             }
-            
-            return (byte) ((~(sum & 0xff) + 1) & 0xff);
+
+//          return (byte) ((~(sum & 0xff) + 1) & 0xff);
+            return sum;
       }
 }

@@ -1,5 +1,7 @@
 package com.uurobot.serialportcompiler.newCode;
 
+import android.util.Log;
+
 /**
  * Created by Administrator on 2018/8/10.
  */
@@ -21,6 +23,8 @@ public class UARTConnector {
       }
       
       public static native int init(String device, int speed);
+      
+      public static native int setHead(byte h, byte l);
       
       public static native int send(byte[] data);
       

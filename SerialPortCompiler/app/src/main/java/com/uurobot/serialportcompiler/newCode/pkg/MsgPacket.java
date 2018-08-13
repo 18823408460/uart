@@ -12,15 +12,7 @@ import java.util.List;
  */
 
 public abstract class MsgPacket implements Packet {
-      public final static byte HANDSHAKE_REQ_TYPE = 0x01;
-      public final static byte TOUCHUAN_MSG_TYPE = 0x01;
-      public final static byte WIFI_CONF_TYPE = 0x02;
-      public final static byte AIUI_CONF_TYPE = 0x03;
-      public final static byte AIUI_PACKET_TYPE = 0x04;
-      public final static byte CTR_PACKET_TYPE = 0x05;
-      public final static byte CUSTOM_PACKET_TYPE = 0x2A;
       private static int seqIDAchor = 0;
-      protected final static byte[] RESERVED_DATA = new byte[]{DataPacket.SYNC_BYTE, 0x00, 0x00, 0x00};
       private int seqID;
       
       public final static byte ACK_TYPE = (byte) 0xff;

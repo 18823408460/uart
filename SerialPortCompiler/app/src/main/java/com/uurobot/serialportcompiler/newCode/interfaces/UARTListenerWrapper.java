@@ -1,5 +1,6 @@
 package com.uurobot.serialportcompiler.newCode.interfaces;
 
+import com.uurobot.serialportcompiler.constant.MsgConChest;
 import com.uurobot.serialportcompiler.newCode.UARTEventListener;
 import com.uurobot.serialportcompiler.newCode.UARTManager;
 import com.uurobot.serialportcompiler.newCode.pkg.MsgPacket;
@@ -23,7 +24,7 @@ public class UARTListenerWrapper implements RequestListener {
       
       @Override
       public void onReqeust(MsgPacket packet) {
-            if (packet.getPkgCmdType() != MsgPacket.HANDSHAKE_REQ_TYPE) {
+            if (packet.getPkgCmdType() != MsgConChest.Event.Heart) {
                   mCallbacker.notifyRequest(mListener, packet);
             }
             else {

@@ -16,8 +16,8 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := serialPort
-LOCAL_SRC_FILES := SerialPortMgr.c
+LOCAL_MODULE    := uart_helper
+LOCAL_SRC_FILES := uartConnetor.c
 //LOCAL_MODULE    := dynamic
 //LOCAL_SRC_FILES := dynamic.c
 
