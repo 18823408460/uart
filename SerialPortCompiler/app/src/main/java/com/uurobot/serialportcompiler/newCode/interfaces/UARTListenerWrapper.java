@@ -23,7 +23,7 @@ public class UARTListenerWrapper implements RequestListener {
       
       @Override
       public void onReqeust(MsgPacket packet) {
-            if (packet.getMsgType() != MsgPacket.HANDSHAKE_REQ_TYPE) {
+            if (packet.getPkgCmdType() != MsgPacket.HANDSHAKE_REQ_TYPE) {
                   mCallbacker.notifyRequest(mListener, packet);
             }
             else {

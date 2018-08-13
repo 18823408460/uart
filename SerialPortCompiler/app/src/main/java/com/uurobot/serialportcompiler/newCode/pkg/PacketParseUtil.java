@@ -1,6 +1,7 @@
 package com.uurobot.serialportcompiler.newCode.pkg;
 
 import com.uurobot.serialportcompiler.constant.MsgConChest;
+import com.uurobot.serialportcompiler.newCode.bean.StringMsgBean;
 import com.uurobot.serialportcompiler.newCode.excption.UARTException;
 import com.uurobot.serialportcompiler.newCode.pkg.msgPkg.TouChuanPacket;
 
@@ -13,7 +14,13 @@ public class PacketParseUtil {
             int packetType = rawData[0] & 0xff;
             switch (packetType) {
                   case MsgConChest.Event.TouChuan:
-                        return (MsgPacket) new TouChuanPacket().decodeBytes(rawData);
+                        TouChuanPacket touChuanPacket = new TouChuanPacket();
+                        touChuanPacket.decodeBytes(rawData);
+                        StringMsgBean stringMsgBean = touChuanPacket.getStringMsgBean();
+                        if (stringMsgBean != null) {
+                              return touChuanPacket;
+                        }
+                        break;
             }
            /* switch (packetType) {
                   case MsgPacket.AIUI_PACKET_TYPE:

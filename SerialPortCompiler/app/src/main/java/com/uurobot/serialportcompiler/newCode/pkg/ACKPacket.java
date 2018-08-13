@@ -9,7 +9,7 @@ import java.util.List;
 public class ACKPacket extends MsgPacket {
       
       @Override
-      public byte getMsgType() {
+      public byte getPkgCmdType() {
             return MsgPacket.ACK_TYPE;
       }
       

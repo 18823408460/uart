@@ -6,8 +6,13 @@ import android.util.Log;
 import com.uurobot.serialportcompiler.constant.MsgConChest;
 import com.uurobot.serialportcompiler.newCode.bean.StringMsgBean;
 import com.uurobot.serialportcompiler.newCode.pkg.MsgPacket;
+import com.uurobot.serialportcompiler.utils.DataUtils;
+import com.uurobot.serialportcompiler.utils.DecodeUtil;
+import com.uurobot.serialportcompiler.utils.PkgData;
+import com.uurobot.serialportcompiler.utils.UnPkgData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,12 +29,16 @@ public class TouChuanPacket extends MsgPacket {
       public static final int SendMaxSize = 10;
       private StringMsgBean stringMsgBean;
       
+      public StringMsgBean getStringMsgBean() {
+            return stringMsgBean;
+      }
+      
       public void setStringMsgBean(StringMsgBean stringMsgBean) {
             this.stringMsgBean = stringMsgBean;
       }
       
       @Override
-      public byte getMsgType() {
+      public byte getPkgCmdType() {
             return TOUCHUAN_MSG_TYPE;
       }
       
@@ -121,27 +130,8 @@ public class TouChuanPacket extends MsgPacket {
             return buf;
       }
       
-      public static int getPackFlag(byte[] data) {
-            int result = data[10] & 0xff;
-            return result >= 0 ? result : 256 + result;
-      }
-      
-      public static int getPackAll(byte[] data) {
-            int result = data[11] & 0xff;
-            return result >= 0 ? result : 256 + result;
-      }
-      
-      public static int getPackPos(byte[] data) {
-            int result = data[12] & 0xff;
-            return result >= 0 ? result : 256 + result;
-      }
-      
-      public static boolean isPack(byte[] data) {
-            return data[9] == 1;
-      }
-      
       @Override
       protected void decodeContent(byte[] data) {
-      
+            stringMsgBean = DecodeUtil.parsePkg(data);
       }
 }

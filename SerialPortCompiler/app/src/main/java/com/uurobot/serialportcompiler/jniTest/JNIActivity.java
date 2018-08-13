@@ -34,17 +34,14 @@ public class JNIActivity extends Activity {
             new Handler().postDelayed(new Runnable() {
                   @Override
                   public void run() {
-                        try {
-                              testMgrOld();
-                        }
-                        catch (IOException e) {
-                              e.printStackTrace();
-                        }
+                        testMgr();
+                        
                   }
             }, 5000);
       }
       
-      int msgtype = 14 ;
+      int msgtype = 14;
+      
       private void testMgrOld() throws IOException {
             final String msg = "hello world今天的天气的怎么样，今天的天气是非常的好，我是非常的喜欢，但是如果我们真的很好很好，世界就是很好很好,如果明天的天气" +
                                        "很好，我就去周游世界，哇哇，非常非常的期待啊，只要你开心，世界就是美好的，明天就是晴天；2我就去周游世界，哇哇，非常非常的期待啊，" +
@@ -103,9 +100,9 @@ public class JNIActivity extends Activity {
       }
       
       private void testMgr() {
-            /*serialPortMgr = SerialPortMgr.getInstance();
+            serialPortMgr = SerialPortMgr.getInstance();
             serialPortMgr.initTtyDevice();
-            serialPortMgr.uartSend(new byte[]{1, 1});*/
+            //serialPortMgr.uartSend(new byte[]{1, 1});
       }
       
       public void send(View v) {

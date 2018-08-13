@@ -2,6 +2,8 @@ package com.uurobot.serialportcompiler.utils;
 
 import android.util.SparseArray;
 
+import com.uurobot.serialportcompiler.newCode.bean.StringMsgBean;
+
 import java.util.HashMap;
 
 /**
@@ -61,7 +63,7 @@ public class DecodeUtil {
             return buf;
       }
       
-      public static void parsePkg(byte[] data) {
+      public static StringMsgBean parsePkg(byte[] data) {
             boolean unPack = isUnPack(data);
             if (unPack) { //不分包
                   int msgType = getMsgType(data);
@@ -69,6 +71,7 @@ public class DecodeUtil {
                   byte[] unPkgDataBytes = getUnPkgDataBytes(data);
                   UnPkgData unPkgData = new UnPkgData(pkgId, msgType, new String(unPkgDataBytes));
                   System.out.println("unPkgData  : " + unPkgData);
+                  return new StringMsgBean(msgType, new String(unPkgDataBytes));
             }
             else {
                   System.out.println("----------- is pkg --------------" + DataUtils.bytesToHexString(data));
@@ -90,9 +93,11 @@ public class DecodeUtil {
                               System.out.println("hashmap size 0 === " + pkgDataHashMap.size());
                               pkgDataHashMap.remove(pkgId);
                               System.out.println("hashmap size=== " + pkgDataHashMap.size());
+                              return new StringMsgBean(pkgData.getMsgType(), pkgData.getData());
                         }
                   }
             }
+            return null;
       }
       
 }

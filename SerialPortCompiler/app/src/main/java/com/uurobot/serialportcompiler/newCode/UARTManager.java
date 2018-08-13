@@ -116,7 +116,7 @@ public class UARTManager {
                   return;
             }
             final MsgPacket msgPacket = dataPacket.data;
-            if (msgPacket.isReqType() && msgPacket.getMsgType() != MsgPacket.HANDSHAKE_REQ_TYPE && mReceivePool.contains(msgPacket.getSeqID())) {
+            if (msgPacket.isReqType() && msgPacket.getPkgCmdType() != MsgPacket.HANDSHAKE_REQ_TYPE && mReceivePool.contains(msgPacket.getSeqID())) {
                   DataPacket ackPacket = PacketParseUtil.getAckMsg(msgPacket);
                   sendResponse(ackPacket); //收到重复的消息（因为对方没有收到响应），所以这里只发送响应就可以
                   return;

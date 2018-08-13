@@ -1,7 +1,10 @@
 package com.uurobot.serialportcompiler.newCode.pkg;
 
 import com.uurobot.serialportcompiler.newCode.excption.UARTException;
+import com.uurobot.serialportcompiler.utils.DataUtils;
+import com.uurobot.serialportcompiler.utils.EncodeUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,14 +58,14 @@ public abstract class MsgPacket implements Packet {
             this.seqID = seqID;
       }
       
-      public abstract byte getMsgType();
+      public abstract byte getPkgCmdType();
       
       protected abstract List<byte[]> getContent();
       
       protected abstract void decodeContent(byte[] data);
       
       public boolean isReqType() {
-            if (getMsgType() != MsgPacket.ACK_TYPE) {
+            if (getPkgCmdType() != MsgPacket.ACK_TYPE) {
                   return true;
             }
             else {
@@ -73,11 +76,23 @@ public abstract class MsgPacket implements Packet {
       
       @Override
       public List<byte[]> encodeBytes() throws UARTException {
-            return getContent();
+            List<byte[]> content = getContent();
+            List<byte[]> sendData = new ArrayList<>();
+            for (byte[] data : content) {
+                  byte[] bytes = EncodeUtil.pkgData(data);
+                  sendData.add(bytes);
+            }
+            return sendData;
       }
       
       @Override
       public Packet decodeBytes(byte[] rawData) throws UARTException {
-            return decodeBytes(rawData);
+            int dataLen = DataUtils.getDataLen(rawData[2], rawData[3]);
+            byte[] bytes = new byte[dataLen];
+            System.arraycopy(rawData,4,bytes,0,dataLen);
+            
+            //待优化
+            decodeContent(rawData);
+            return this;
       }
 }

@@ -34,6 +34,14 @@ public class PkgData {
             
       }
       
+      public int getMsgType() {
+            return msgType;
+      }
+      
+      public String getData() {
+            return data;
+      }
+      
       public boolean addData(int pos, byte[] data) {
             Log.e("DecodeUtil", "add  : " + pos + "   code=" + hashCode());
             byte[] bytes = list.get(pos);

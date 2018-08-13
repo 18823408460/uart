@@ -23,11 +23,32 @@ public class UartTestActivity extends Activity {
       @Override
       protected void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
+//            test1();
+              testUart();
+      }
+      
+      private void testUart() {
+      }
+      
+      private void compress() {
+            String hello = "我是中国人，时发生大洪水的念佛水电费是的佛山佛山的囧是建瓯盘圣诞节是打飞机哦派送的风景哦派送对方,水电费水电费是" +
+                                   "水电费而皮皮狗而突然突然突然又突然破恐怕没破解" +
+                                   "明天的天气怎么样，你说对不对";
+            Log.e(TAG, "onCreate: " + hello.getBytes().length);
             
+            byte[] compress = DataUtils.compress(hello.getBytes());
+            Log.e(TAG, "onCreate: " + compress.length);
+            
+            byte[] bytes = DataUtils.unCompress(compress);
+            Log.e(TAG, "onCreate: " + bytes.length);
+      }
+      
+      private void test1() {
             MsgPacket hello = PacketBuilder.obtainTouchuanMsg(1, "hello");
             MsgPacket hello1 = PacketBuilder.obtainTouchuanMsg(2, "hello");
             MsgPacket hello2 = PacketBuilder.obtainTouchuanMsg(3, "hello");
-           
+            
             MsgPacket hello4 = PacketBuilder.obtainTouchuanMsg(4, "我是中国人你呢");
             try {
                   DataPacket dataPacket = DataPacket.buildDataPacket(hello);

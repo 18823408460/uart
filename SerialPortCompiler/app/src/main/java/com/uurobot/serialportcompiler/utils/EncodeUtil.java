@@ -19,6 +19,24 @@ public class EncodeUtil {
             return pkgId++ % Integer.MAX_VALUE;
       }
       
+      
+      public static byte[] pkgData(byte[] data) {
+            int index = 0;
+            int dataLen = data.length;
+            int pkgLen = dataLen + 7;
+            byte[] buf = new byte[pkgLen];
+            buf[index++] = MsgConChest.Common.Head_H;
+            buf[index++] = MsgConChest.Common.Head_L;
+            buf[index++] = (byte) ((dataLen >> 8) & 0xff);
+            buf[index++] = (byte) (dataLen & 0xff);
+            System.arraycopy(data, 0, buf, index, dataLen);
+            index += dataLen;
+            buf[index++] = getCheckData(buf);
+            buf[index++] = MsgConChest.Common.Tail_H;
+            buf[index++] = MsgConChest.Common.Tail_L;
+            return buf;
+      }
+      
       public static byte[] getTouchuanData(int msgType) {
             int index = 0;
             int dataLen = 6;
